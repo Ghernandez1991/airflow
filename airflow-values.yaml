@@ -1,0 +1,116 @@
+# Use KubernetesExecutor so tasks run as individual pods
+executor: "KubernetesExecutor"
+
+# Basic Airflow image (default is fine)
+images:
+  airflow:
+    repository: apache/airflow
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+# Use the built-in Postgres for metadata DB
+postgresql:
+  enabled: false
+data:
+  metadataConnection:
+    user: airflow
+    pass: 
+    protocol: postgresql
+    host: airflow-postgres.airflow.svc.cluster.local
+    port: 5432
+    db: airflow
+
+
+
+# We don't need Redis for pure KubernetesExecutor
+redis:
+  enabled: false
+webserverSecretKeySecretName: airflow-webserver-secret-key
+scheduler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  startupProbe:
+    timeoutSeconds: 60        # was 20
+    periodSeconds: 20         # was 10
+    failureThreshold: 10      # was 6
+  livenessProbe:
+    timeoutSeconds: 60        # was 20
+    periodSeconds: 60         # keep same or bump if you want
+    failureThreshold: 10     
+  # Mount host DAGs dir into all Airflow components that need them
+  extraVolumes:
+    - name: host-dags
+      hostPath:
+        path: /home/gshernandez/Desktop/airflow_kubernetes/dags
+        type: Directory
+  extraVolumeMounts:
+    - name: host-dags
+      mountPath: /opt/airflow/dags
+      readOnly: true
+
+webserver:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  defaultUser:
+    enabled: true
+    username: "admin"
+    password: 
+  # Mount host DAGs dir into all Airflow components that need them
+  extraVolumes:
+    - name: host-dags
+      hostPath:
+        path: /home/gshernandez/Desktop/airflow_kubernetes/dags
+        type: Directory
+  extraVolumeMounts:
+    - name: host-dags
+      mountPath: /opt/airflow/dags
+      readOnly: true
+
+triggerer:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  livenessProbe:
+    timeoutSeconds: 60      # more time per health check
+    periodSeconds: 60
+    failureThreshold: 10
+
+dagProcessor:
+  extraVolumes:
+    - name: host-dags
+      hostPath:
+        path: /home/gshernandez/Desktop/airflow_kubernetes/dags
+        type: Directory
+  extraVolumeMounts:
+    - name: host-dags
+      mountPath: /opt/airflow/dags
+      readOnly: true
+
+# Don’t deploy Flower, log-groomer, etc to save RAM/CPU
+flower:
+  enabled: false
+
+logs:
+  persistence:
+    enabled: false  # fine for homelab; logs live in pods
+
+# Keep it simple for now: no ingress, we’ll use port-forward
+ingress:
+  enabled: false
