@@ -4,9 +4,9 @@ executor: "KubernetesExecutor"
 # Basic Airflow image (default is fine)
 images:
   airflow:
-    repository: apache/airflow
+    repository: gshernandez481/airflow
     tag: "latest"
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
 
 # Use the built-in Postgres for metadata DB
 postgresql:
@@ -16,7 +16,7 @@ data:
     user: airflow
     pass: 
     protocol: postgresql
-    host: airflow-postgres.airflow.svc.cluster.local
+    host: airflow-postgres
     port: 5432
     db: airflow
 
@@ -43,16 +43,6 @@ scheduler:
     timeoutSeconds: 60        # was 20
     periodSeconds: 60         # keep same or bump if you want
     failureThreshold: 10     
-  # Mount host DAGs dir into all Airflow components that need them
-  extraVolumes:
-    - name: host-dags
-      hostPath:
-        path: /home/gshernandez/Desktop/airflow_kubernetes/dags
-        type: Directory
-  extraVolumeMounts:
-    - name: host-dags
-      mountPath: /opt/airflow/dags
-      readOnly: true
 
 webserver:
   replicas: 1
@@ -67,17 +57,6 @@ webserver:
     enabled: true
     username: "admin"
     password: 
-  # Mount host DAGs dir into all Airflow components that need them
-  extraVolumes:
-    - name: host-dags
-      hostPath:
-        path: /home/gshernandez/Desktop/airflow_kubernetes/dags
-        type: Directory
-  extraVolumeMounts:
-    - name: host-dags
-      mountPath: /opt/airflow/dags
-      readOnly: true
-
 triggerer:
   replicas: 1
   resources:
@@ -92,16 +71,6 @@ triggerer:
     periodSeconds: 60
     failureThreshold: 10
 
-dagProcessor:
-  extraVolumes:
-    - name: host-dags
-      hostPath:
-        path: /home/gshernandez/Desktop/airflow_kubernetes/dags
-        type: Directory
-  extraVolumeMounts:
-    - name: host-dags
-      mountPath: /opt/airflow/dags
-      readOnly: true
 
 # Don’t deploy Flower, log-groomer, etc to save RAM/CPU
 flower:
