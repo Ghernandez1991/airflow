@@ -21,7 +21,7 @@ with DAG(
 
     previous = None
 
-    for i in range(1, 101):
+    for i in range(1, 20):
         t = PythonOperator(
             task_id=f"hello_task_{i}",
             python_callable=hello_world,
