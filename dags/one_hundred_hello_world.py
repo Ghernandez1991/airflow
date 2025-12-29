@@ -9,6 +9,7 @@ logger = logging.getLogger("airflow.task")
 def hello_world():
 
     logging.info("hello world")
+    print("is this working?")
 
 
 with DAG(
