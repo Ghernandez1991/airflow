@@ -2,9 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
 
@@ -12,7 +10,23 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE_NAME: my-airflow-image
+      IMAGE_TAG: ${{ github.sha }}
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build . \
+            --file Dockerfile \
+            --tag $IMAGE_NAME:$IMAGE_TAG
+
+      - name: Validate Airflow DAGs
+        run: |
+          docker run --rm \
+            -e AIRFLOW__CORE__LOAD_EXAMPLES=False \
+            $IMAGE_NAME:$IMAGE_TAG \
+            bash -c "airflow db init && airflow dags list --subdir /opt/airflow/dags"
