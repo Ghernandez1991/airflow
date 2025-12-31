@@ -31,5 +31,6 @@ jobs:
             "$IMAGE_NAME:$IMAGE_TAG" \
             bash -lc '
               airflow db migrate &&
+              ls -la /opt/airflow/dags
               airflow dags list-import-errors
             '
