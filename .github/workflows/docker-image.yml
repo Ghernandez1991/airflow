@@ -32,5 +32,5 @@ jobs:
             bash -lc '
               airflow db migrate &&
               ls -la /opt/airflow/dags
-              airflow dags list-import-errors
+              airflow dags list-import-errors -l
             '
