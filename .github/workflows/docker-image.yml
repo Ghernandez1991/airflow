@@ -33,4 +33,4 @@ jobs:
             airflow triggerer & \
             airflow dag-processor & \
             airflow scheduler \
-            airflow dags list-import-errors
+            airflow dags list-import-errors"
