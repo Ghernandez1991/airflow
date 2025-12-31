@@ -28,5 +28,9 @@ jobs:
         run: |
           docker run --rm \
             -e AIRFLOW__CORE__LOAD_EXAMPLES=False \
-            $IMAGE_NAME:$IMAGE_TAG \
-            bash -lc "airflow db migrate && airflow dags list --subdir /opt/airflow/dags"
+            "$IMAGE_NAME:$IMAGE_TAG" \
+            bash -lc '
+              airflow db migrate &&
+              ls -la /opt/airflow/dags
+              airflow dags list-import-errors -l
+            '
