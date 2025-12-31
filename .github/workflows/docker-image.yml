@@ -30,6 +30,6 @@ jobs:
             -e AIRFLOW__CORE__LOAD_EXAMPLES=False \
             "$IMAGE_NAME:$IMAGE_TAG" \
             bash -lc '
-              airflow db migrate
+              airflow db migrate &&
               airflow dags list-import-errors
             '
