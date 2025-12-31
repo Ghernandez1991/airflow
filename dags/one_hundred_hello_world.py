@@ -13,10 +13,9 @@ def hello_world():
 
 
 with DAG(
-    dag_id="hello_100_tasks",
     start_date=datetime(2024, 1, 1),
     schedule=None,
-    catchup=False
+    catchup=False,
     tags=["k8s-demo"],
 ) as dag:
 
