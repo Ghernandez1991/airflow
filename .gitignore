@@ -1,0 +1,5 @@
+airflow-values.secrets.local.yaml
+*.secrets.local.yaml
+secrets/postgres.env
+secrets/*.env
+!secrets/*.example.env

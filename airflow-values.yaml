@@ -14,7 +14,6 @@ postgresql:
 data:
   metadataConnection:
     user: airflow
-    pass: 
     protocol: postgresql
     host: airflow-postgres
     port: 5432
@@ -25,7 +24,6 @@ data:
 # We don't need Redis for pure KubernetesExecutor
 redis:
   enabled: false
-webserverSecretKeySecretName: airflow-webserver-secret-key
 scheduler:
   replicas: 1
   resources:
@@ -56,7 +54,6 @@ webserver:
   defaultUser:
     enabled: true
     username: "admin"
-    password: 
 triggerer:
   replicas: 1
   resources:
