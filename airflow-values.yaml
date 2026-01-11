@@ -61,15 +61,16 @@ triggerer:
   replicas: 1
   resources:
     requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 300m
+      cpu: 200m
       memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
   livenessProbe:
-    timeoutSeconds: 60      # more time per health check
+    timeoutSeconds: 60
     periodSeconds: 60
     failureThreshold: 10
+
 
 
 # Don’t deploy Flower, log-groomer, etc to save RAM/CPU
