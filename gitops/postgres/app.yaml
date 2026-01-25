@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Hernandez1991/airflow.git
+    repoURL: git@github.com:Ghernandez1991/airflow.git
     targetRevision: gitops_adoption
     path: gitops/postgres
   destination:
