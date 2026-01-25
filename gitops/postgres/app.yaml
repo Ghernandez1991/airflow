@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: git@github.com:Ghernandez1991/airflow.git
-    targetRevision: gitops_adoption
+    targetRevision: main
     path: gitops/postgres
   destination:
     server: https://kubernetes.default.svc
