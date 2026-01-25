@@ -4,7 +4,7 @@ metadata:
   name: airflow-postgres
   namespace: airflow
   annotations:
-    gitops-test/heartbeat: "2026-01-25-1"
+    gitops-test/heartbeat: "2026-01-27-1"
 spec:
   selector:
     app: airflow-postgres
