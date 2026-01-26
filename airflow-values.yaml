@@ -1,85 +1,86 @@
-# Use KubernetesExecutor so tasks run as individual pods
-executor: "KubernetesExecutor"
+airflow:
+  # Use KubernetesExecutor so tasks run as individual pods
+  executor: "KubernetesExecutor"
 
-# Basic Airflow image (default is fine)
-images:
-  airflow:
-    repository: gshernandez481/airflow
-    tag: "997522a"
-    pullPolicy: IfNotPresent
+  # Basic Airflow image (default is fine)
+  images:
+    airflow:
+      repository: gshernandez481/airflow
+      tag: "997522a"
+      pullPolicy: IfNotPresent
 
-# Use the built-in Postgres for metadata DB
-postgresql:
-  enabled: false
-data:
-  #force helm to use a local secret named airflow-metadata
-  metadataSecretName: airflow-metadata
-  metadataConnection:
-    user: airflow
-    protocol: postgresql
-    host: airflow-postgres
-    port: 5432
-    db: airflow
-
-
-
-# We don't need Redis for pure KubernetesExecutor
-redis:
-  enabled: false
-scheduler:
-  replicas: 1
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 1Gi
-  startupProbe:
-    timeoutSeconds: 60        # was 20
-    periodSeconds: 20         # was 10
-    failureThreshold: 10      # was 6
-  livenessProbe:
-    timeoutSeconds: 60        # was 20
-    periodSeconds: 60         # keep same or bump if you want
-    failureThreshold: 10     
-
-webserver:
-  replicas: 1
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 300m
-      memory: 512Mi
-  defaultUser:
-    enabled: true
-    username: "admin"
-triggerer:
-  replicas: 1
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 1Gi
-  livenessProbe:
-    timeoutSeconds: 60
-    periodSeconds: 60
-    failureThreshold: 10
+  # Use the built-in Postgres for metadata DB
+  postgresql:
+    enabled: false
+  data:
+    #force helm to use a local secret named airflow-metadata
+    metadataSecretName: airflow-metadata
+    metadataConnection:
+      user: airflow
+      protocol: postgresql
+      host: airflow-postgres
+      port: 5432
+      db: airflow
 
 
 
-# Don’t deploy Flower, log-groomer, etc to save RAM/CPU
-flower:
-  enabled: false
+  # We don't need Redis for pure KubernetesExecutor
+  redis:
+    enabled: false
+  scheduler:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    startupProbe:
+      timeoutSeconds: 60        # was 20
+      periodSeconds: 20         # was 10
+      failureThreshold: 10      # was 6
+    livenessProbe:
+      timeoutSeconds: 60        # was 20
+      periodSeconds: 60         # keep same or bump if you want
+      failureThreshold: 10     
 
-logs:
-  persistence:
-    enabled: false  # fine for homelab; logs live in pods
+  webserver:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+    defaultUser:
+      enabled: true
+      username: "admin"
+  triggerer:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    livenessProbe:
+      timeoutSeconds: 60
+      periodSeconds: 60
+      failureThreshold: 10
 
-# Keep it simple for now: no ingress, we’ll use port-forward
-ingress:
-  enabled: false
+
+
+  # Don’t deploy Flower, log-groomer, etc to save RAM/CPU
+  flower:
+    enabled: false
+
+  logs:
+    persistence:
+      enabled: false  # fine for homelab; logs live in pods
+
+  # Keep it simple for now: no ingress, we’ll use port-forward
+  ingress:
+    enabled: false
