@@ -30,7 +30,7 @@ spec:
         valueFiles:
           - $values/gitops/airflow/values.yaml
     - repoURL: git@github.com:Ghernandez1991/airflow.git
-      targetRevision: gitops_adoption
+      targetRevision: gitops_adoption_airflow
       ref: values
 
   syncPolicy:
