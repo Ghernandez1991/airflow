@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: airflow
+  namespace: argocd
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: airflow
+
+  source:
+    repoURL: https://airflow.apache.org
+    chart: airflow
+    targetRevision: 1.18.0
+    helm:
+      releaseName: airflow
+      valueFiles:
+        - values.yaml
+
+  # This is the trick: the values.yaml lives in Git, not in the Helm repo.
+  # Argo supports this using "sources" (multi-source).
+  sources:
+    - repoURL: https://airflow.apache.org
+      chart: airflow
+      targetRevision: 1.18.0
+      helm:
+        releaseName: airflow
+        valueFiles:
+          - $values/gitops/airflow/values.yaml
+    - repoURL: git@github.com:Ghernandez1991/airflow.git
+      targetRevision: gitops_adoption
+      ref: values
+
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
