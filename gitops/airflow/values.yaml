@@ -6,7 +6,7 @@ airflow:
   images:
     airflow:
       repository: gshernandez481/airflow
-      tag: "997522a"
+      tag: "2407a7d"
       pullPolicy: IfNotPresent
 
   # Use the built-in Postgres for metadata DB
