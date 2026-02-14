@@ -1,4 +1,31 @@
 airflow:
+
+  extraEnv: |
+    - name: AIRFLOW__LOGGING__REMOTE_LOGGING
+      value: "True"
+    - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
+      value: "s3://airflow-logs"
+    - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
+      value: "airflow-logs"
+
+  kubernetesPodTemplate:
+    enabled: true
+    stringOverride: |
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: placeholder-name
+      spec:
+        restartPolicy: Never
+        containers:
+          - name: base
+            env:
+              - name: AIRFLOW__LOGGING__REMOTE_LOGGING
+                value: "True"
+              - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
+                value: "s3://airflow-logs"
+              - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
+                value: "airflow-logs"
   # Use KubernetesExecutor so tasks run as individual pods
   executor: "KubernetesExecutor"
 
