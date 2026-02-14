@@ -1,5 +1,5 @@
 airflow:
-
+  #these should inject directly into airflow specific containers
   extraEnv: |
     - name: AIRFLOW__LOGGING__REMOTE_LOGGING
       value: "True"
@@ -8,24 +8,6 @@ airflow:
     - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
       value: "airflow-logs"
 
-  kubernetesPodTemplate:
-    enabled: true
-    stringOverride: |
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: placeholder-name
-      spec:
-        restartPolicy: Never
-        containers:
-          - name: base
-            env:
-              - name: AIRFLOW__LOGGING__REMOTE_LOGGING
-                value: "True"
-              - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
-                value: "s3://airflow-logs"
-              - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
-                value: "airflow-logs"
   # Use KubernetesExecutor so tasks run as individual pods
   executor: "KubernetesExecutor"
 
@@ -111,3 +93,14 @@ airflow:
   # Keep it simple for now: no ingress, we’ll use port-forward
   ingress:
     enabled: false
+
+  #https://airflow.apache.org/docs/helm-chart/stable/parameters-ref.html
+  #these are specifically for the worker pods 
+workers:
+  env:
+    - name: AIRFLOW__LOGGING__REMOTE_LOGGING
+      value: "True"
+    - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
+      value: "s3://airflow-logs"
+    - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
+      value: "airflow-logs"
