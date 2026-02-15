@@ -1,4 +1,9 @@
 airflow:
+
+  extraEnvFrom: |
+    - secretRef:
+        name: airflow-s3-conn
+
   #these should inject directly into airflow specific containers
   extraEnv: |
     - name: AIRFLOW__LOGGING__REMOTE_LOGGING
@@ -97,6 +102,9 @@ airflow:
   #https://airflow.apache.org/docs/helm-chart/stable/parameters-ref.html
   #these are specifically for the worker pods 
 workers:
+  envFrom:
+    - secretRef:
+        name: airflow-s3-conn
   env:
     - name: AIRFLOW__LOGGING__REMOTE_LOGGING
       value: "True"
