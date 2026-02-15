@@ -11,7 +11,7 @@ airflow:
     - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
       value: "s3://airflow-logs"
     - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
-      value: "airflow-logs"
+      value: "airflow_logs"
 
   # Use KubernetesExecutor so tasks run as individual pods
   executor: "KubernetesExecutor"
@@ -111,4 +111,4 @@ workers:
     - name: AIRFLOW__LOGGING__REMOTE_BASE_LOG_FOLDER
       value: "s3://airflow-logs"
     - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
-      value: "airflow-logs"
+      value: "airflow_logs"
