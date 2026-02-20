@@ -139,3 +139,20 @@ docker run -p 8080:8080 my_image_name
 
 Make sure to use immutable tags: SHA values
 ---
+
+### ⚠️ When Does a Deployment Actually Occur?
+
+Argo CD reconciles the cluster based on changes to the GitOps manifests — not DAG code alone.
+
+A new deployment is triggered when:
+
+- The Airflow image tag in `/gitops/airflow/values.yaml` changes
+- Helm values affecting the Airflow release change
+- GitOps manifests are modified
+
+A deployment is **not** triggered when:
+
+- DAG code changes without building and tagging a new image to docker repo
+- Local testing changes are not merged into Git
+
+> Because DAGs are baked into the Airflow image, updating DAGs requires building a new image and updating the image tag in `values.yaml`.
