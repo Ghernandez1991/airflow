@@ -12,13 +12,20 @@ flowchart TB
         end
     end
 
-    User -->|Access UI via exposed port| WS
-    WS -->|Gets task and dag state| DB
-    SCH <-->|Determine if a task is runnable| DB
-    SCH -->|Reads DAGs /opt/airflow/dags| DAGs
-    SCH -->|Queues Tasks| EXEC
-    EXEC -->|Runs Tasks via Fork| FORK
-    FORK --> |Updates Status in DB| DB
+    User a1@-->|Access UI via exposed port| WS
+    a1@{ animate: true }
+    WS b1@-->|Gets task and dag state| DB
+    b1@{ animate: true }
+    SCH c1@<-->|Determine if a task is runnable| DB
+    c1@{ animate: true }
+    SCH d1@-->|Reads DAGs /opt/airflow/dags| DAGs
+    d1@{ animate: true }
+    SCH e1@-->|Queues Tasks| EXEC
+    e1@{ animate: true }
+    EXEC f1@-->|Runs Tasks via Fork| FORK
+    f1@{ animate: true }
+    FORK g1@--> |Updates Status in DB| DB
+    g1@{ animate: true }
 
     %% ---- Styling ----
     classDef user fill:#E3F2FD,stroke:#1E88E5,stroke-width:1px,color:#0D47A1;
