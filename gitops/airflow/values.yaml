@@ -1,15 +1,7 @@
+#source helm chart
+#https://github.com/apache/airflow/blob/main/chart/values.yaml
+
 airflow:
-
-  #https://airflow.apache.org/docs/helm-chart/stable/index.html#installing-the-helm-chart-with-argo-cd-flux-rancher-or-terraform
-  createUserJob:
-    useHelmHooks: false
-    applyCustomEnv: false
-
-  migrateDatabaseJob:
-    useHelmHooks: false
-    applyCustomEnv: false
-    jobAnnotations:
-      "argocd.argoproj.io/hook": Sync
 
   extraEnvFrom: |
     - secretRef:
@@ -123,3 +115,14 @@ workers:
       value: "s3://airflow-logs"
     - name: AIRFLOW__LOGGING__REMOTE_LOG_CONN_ID
       value: "airflow_logs"
+
+#https://airflow.apache.org/docs/helm-chart/stable/index.html#installing-the-helm-chart-with-argo-cd-flux-rancher-or-terraform
+createUserJob:
+  useHelmHooks: false
+  applyCustomEnv: false
+
+migrateDatabaseJob:
+  useHelmHooks: false
+  applyCustomEnv: false
+  jobAnnotations:
+    "argocd.argoproj.io/hook": Sync
